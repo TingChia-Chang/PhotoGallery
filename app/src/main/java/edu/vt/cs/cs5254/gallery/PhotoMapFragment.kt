@@ -59,11 +59,14 @@ class PhotoMapFragment : MapViewFragment(), GoogleMap.OnMarkerClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onMapViewCreated(view, savedInstanceState){ googleMap ->
             googleMap.setOnMarkerClickListener(this@PhotoMapFragment)
+            updateUI()
+
         }
-        photoMapViewModel.galleryItemLiveData.observe(
+        photoMapViewModel.geoGalleryItemMapLiveData.observe(
             viewLifecycleOwner,
-            Observer{ galleryItems ->
-                updateUI(galleryItems)
+            Observer{ galleryItemMap ->
+                geoGalleryItemMap = galleryItemMap
+                updateUI()
 
             })
     }
@@ -83,23 +86,25 @@ class PhotoMapFragment : MapViewFragment(), GoogleMap.OnMarkerClickListener{
     }
 
 
-    private fun updateUI(galleryItems: List<GalleryItem>) {
+    private fun updateUI() {
 
         // if the fragment is not currently added to its activity, or
         // if there are not gallery items, do not update the UI
-        if (!isAdded || galleryItems.isEmpty()) {
+        if (!isAdded || geoGalleryItemMap.isEmpty()) {
             return
         }
 
-        Log.i(TAG, "Gallery has has " + galleryItems.size + " items")
+        if (!super.mapIsInitialized()){
+            return
+        }
+
+        Log.i(TAG, "Gallery has has " + geoGalleryItemMap.size + " items")
 
         // remove all markers, overlays, etc. from the map
         googleMap.clear()
 
         val bounds = LatLngBounds.Builder()
-        geoGalleryItemMap =
-            galleryItems.filterNot { it.latitude == "0" && it.longitude == "0" }
-                .associateBy { it.id }
+
         for (item in geoGalleryItemMap.values) {
             // log the information of each gallery item with a valid lat-lng
             Log.i(
@@ -126,7 +131,7 @@ class PhotoMapFragment : MapViewFragment(), GoogleMap.OnMarkerClickListener{
     override fun onMarkerClick(marker: Marker?): Boolean {
 //        val galleryItemId = marker?.tag as String
 //        Log.d(TAG, "Clicled on marker $galleryItemId")
-//        val item = geoGalleryItemMap.get(galleryItemId)
+//        val item = geoGalleryItemMap[galleryItemId]
 //        val uri = item?.photoPageUri ?:return false
 //        val intent = PhotoPageActivity.newIntent(requireContext(), uri)
 //        startActivity(intent)

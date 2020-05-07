@@ -106,6 +106,8 @@ open class MapViewFragment : Fragment() {
         mapView.onLowMemory()
     }
 
+    protected fun mapIsInitialized() = this::googleMap.isInitialized
+
     /**
      * A utility function for setting bitmaps as map marker icons.
      * Defaults to 200dp square.

@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,6 +30,8 @@ class PhotoGalleryFragment : Fragment() {
 
         photoGalleryViewModel =
             ViewModelProvider(this).get(PhotoGalleryViewModel::class.java)
+
+            photoGalleryViewModel.loadPhotos()
 
         val responseHandler = Handler()
         thumbnailDownloader =
@@ -59,7 +60,7 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoGalleryViewModel.galleryItemLiveData.observe(
+        photoGalleryViewModel.galleryItemsLiveData.observe(
             viewLifecycleOwner,
             Observer { galleryItems ->
                 photoRecyclerView.adapter = PhotoAdapter(galleryItems)
