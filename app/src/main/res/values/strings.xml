@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Gallery</string>
-    <string name="flickr_key">d3ce0e1772689a3b9d01e532aaff0437</string>
+    <string name="flickr_key">your Flickr key</string>
     <string name="gallery">Gallery</string>
     <string name="map">Map</string>
-    <string name="google_key">AIzaSyAi5M798lr5UZSZxDgr9-K7bSMB0M97bNA</string>
+    <string name="google_key">your google key</string>
+    <string name="refresh">refresh</string>
 </resources>

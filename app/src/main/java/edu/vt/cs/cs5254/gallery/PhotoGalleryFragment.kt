@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -80,12 +81,21 @@ class PhotoGalleryFragment : Fragment() {
         )
     }
 
-    private class PhotoHolder(itemImageView: ImageView)
+    private class PhotoHolder(itemImageView: ImageView, onHolderClickListener: OnHolderClickListener)
         : RecyclerView.ViewHolder(itemImageView) {
         val bindDrawable: (Drawable) -> Unit = itemImageView::setImageDrawable
+        init {
+            itemImageView.setOnClickListener{
+                onHolderClickListener.onClickListener(adapterPosition)
+            }
+
+        }
     }
+
+
+
     private inner class PhotoAdapter(private val galleryItems: List<GalleryItem>)
-        : RecyclerView.Adapter<PhotoHolder>() {
+        : RecyclerView.Adapter<PhotoHolder>(), OnHolderClickListener {
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -95,7 +105,7 @@ class PhotoGalleryFragment : Fragment() {
                 parent,
                 false
             ) as ImageView
-            return PhotoHolder(view)
+            return PhotoHolder(view, this)
         }
         override fun getItemCount(): Int = galleryItems.size
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
@@ -107,7 +117,19 @@ class PhotoGalleryFragment : Fragment() {
             holder.bindDrawable(placeholder)
             thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
         }
+
+        override fun onClickListener(position: Int) {
+            val intent = PhotoPageActivity
+                .newIntent(requireContext(), galleryItems[position].photoPageUri)
+            startActivity(intent)
+        }
     }
+
+    interface OnHolderClickListener{
+        fun onClickListener(position: Int){}
+
+    }
+
     companion object {
         fun newInstance() = PhotoGalleryFragment()
     }

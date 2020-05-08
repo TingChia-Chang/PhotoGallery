@@ -33,9 +33,11 @@ object FlickrFetchr {
     }
     fun fetchPhotos() {
 
-        if (responseLiveData.value != null){
+        if (responseLiveData.value?.isNotEmpty()==true){
             return
         }
+
+
 
         val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos()
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
@@ -57,6 +59,10 @@ object FlickrFetchr {
                 responseLiveData.value = galleryItems
             }
         })
+    }
+
+    fun clearcache(){
+        responseLiveData.value = emptyList()
     }
 
     @WorkerThread

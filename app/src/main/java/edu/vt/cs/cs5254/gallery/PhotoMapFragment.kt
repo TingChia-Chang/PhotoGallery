@@ -129,12 +129,12 @@ class PhotoMapFragment : MapViewFragment(), GoogleMap.OnMarkerClickListener{
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-//        val galleryItemId = marker?.tag as String
-//        Log.d(TAG, "Clicled on marker $galleryItemId")
-//        val item = geoGalleryItemMap[galleryItemId]
-//        val uri = item?.photoPageUri ?:return false
-//        val intent = PhotoPageActivity.newIntent(requireContext(), uri)
-//        startActivity(intent)
+        val galleryItemId = marker?.tag as String
+        Log.d(TAG, "Clicled on marker $galleryItemId")
+        val item = geoGalleryItemMap[galleryItemId]
+        val uri = item?.photoPageUri ?:return false
+        val intent = PhotoPageActivity.newIntent(requireContext(), uri)
+        startActivity(intent)
         return true
     }
 
